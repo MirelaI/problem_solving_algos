@@ -29,7 +29,9 @@ object Solution {
                 case newMax: Int if score > max => 
                     max = newMax
                     records(0) += 1
-                case _ =>  
+                // Move to next record if there is not change
+                // in min & max
+                case _ =>                  
             }
         }
 
