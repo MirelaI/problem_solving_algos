@@ -1,0 +1,2 @@
+On Unix systems, you can show whether a file is left open by executing one of these fromFile statements in the REPL with a real file (like /etc/passwd), and then running an lsof (“list open files”) command like this at the Unix command line:
+$ sudo lsof -u Al | grep '/etc/passwd'
