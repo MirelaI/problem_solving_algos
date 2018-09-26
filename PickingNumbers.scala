@@ -8,8 +8,6 @@ object PickingNumbers {
         val listOfArrays: ArrayBuffer[ArrayBuffer[Int]] = new ArrayBuffer()
 
         var tempArray: ArrayBuffer[Int] = new ArrayBuffer()
-        //Have a starting point
-        tempArray += sortedList(0)
     
         for (i <- 0 until n) {
             val currentElem = sortedList(i)
@@ -25,7 +23,7 @@ object PickingNumbers {
             } 
 
             // When is the right time to push into the queue
-            if (i == n -1 ) listOfArrays += tempArray
+            if (i == n - 1 ) listOfArrays += tempArray
         }
 
         listOfArrays.map { _.size}.sorted.last
