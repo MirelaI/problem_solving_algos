@@ -2,8 +2,12 @@ object UtopianTree {
 
     // Complete the utopianTree function below.
     def utopianTree(n: Int): Int = {
-        ...
-
+        (0 until n).foldLeft(1){ (height, n) => 
+            n match {
+                case n if n % 2 == 0 => height * 2
+                case _ => height + 1
+            }        
+        }
     }
 
     def main(args: Array[String]): Unit = {
