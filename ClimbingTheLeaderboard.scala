@@ -1,40 +1,35 @@
+import scala.collection.mutable.{ArrayBuffer, Queue}
+
 object ClimbingTheLeaderboard {
 
     // Complete the climbingLeaderboard function below.
+    // Assumptions made: 
+    // - Alice scores are not sorted in an ascending order so we are going to sort them
+    // - Scores are ordered in a descending order
+    // Result: no timeouts in Hackerrank and all tests pass!
     def climbingLeaderboard(scores: Array[Int], aliceScores: Array[Int]): Array[Int] = {
         val uniqueScores = scores.distinct
-        var lastIndex = uniqueScores.size 
+        val aliceScoresQueue = aliceScores.sorted.to[Queue]
+        val startIndex = uniqueScores.size - 1
+        val ranks = new ArrayBuffer[Int]()
 
-        aliceScores.map { score: Int => 
-            val valueToCompare: Int = binarySearch(uniqueScores.take(lastIndex), score)
-            val rank = uniqueScores.indexOf(valueToCompare) + 1
-            lastIndex = rank
+        // Go descending...we know the unique scores are in descending order
+        for (i <- startIndex to (0, -1)) {
+            if (aliceScoresQueue.nonEmpty) {
+                while (aliceScoresQueue.nonEmpty && aliceScoresQueue.head < uniqueScores(i)) {
+                    ranks += i + 2
+                    aliceScoresQueue.dequeue
+                }
 
-            score match {
-                case x: Int if x < valueToCompare => rank + 1
-                case x: Int if x > valueToCompare => 
-                    if (rank - 1 > 0) rank - 1 else rank
-                case _ => rank
+                while (aliceScoresQueue.nonEmpty && aliceScoresQueue.head == uniqueScores(i)) {
+                    ranks += i + 1
+                    aliceScoresQueue.dequeue
+                }
             }
         }
 
+        ranks.toArray ++ Array.fill(aliceScoresQueue.size)(1)
     }
-
-    def binarySearch(scores: Array[Int], score: Int): Int = {
-        scores.size match {
-            // Scores = 100 90 90 80 75 60
-            case 1 => scores(0)
-            case _ => 
-                val mid = scores.size/2 
-
-                if (scores(mid) > score) {
-                    binarySearch(scores.drop(mid), score)
-                } else {
-                    binarySearch(scores.take(mid), score)
-                }
-        }
-    }
-
 
     def main(args: Array[String]): Unit = {        
         val stdin = scala.io.StdIn
@@ -42,7 +37,6 @@ object ClimbingTheLeaderboard {
         val scoresCount = stdin.readLine.trim.toInt
 
         val scores = stdin.readLine.split(" ").map(_.trim.toInt)
-        scores.foreach(println(_))
         val aliceCount = stdin.readLine.trim.toInt
 
         val alice = stdin.readLine.split(" ").map(_.trim.toInt)
