@@ -1,4 +1,17 @@
 
+/* 
+Solution is good, works within the expected time. Since it gives a runtime
+error in Scala, I solve it in Perl using the same algorithm and it works 
+perfectly, below is a snippet of the perl code: 
+for (1..$q) {
+    my $queries_item = <>;
+    $queries_item =~ s/\s+$//;
+    my $index = ($n + ($queries_item % $n) - $k) % $n;
+    say $a[$index];
+}
+where n is the length of the array and k is the number of rotations.
+*/
+
 object CircularArrayRotation {
 
     def circularArrayRotation(array: Array[Int], rotations: Int, queries: Array[Int]): Array[Int] = {  
