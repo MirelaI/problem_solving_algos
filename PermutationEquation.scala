@@ -1,6 +1,9 @@
 object PermutationEquation {
     def permutationEquation(p: Array[Int]) = {
-        // add here the implementation
+        val pToMap = p.zipWithIndex.toMap
+        (1 to p.size) map { el: Int => 
+            pToMap(pToMap(el) + 1) + 1
+        }
     }
 
     def main(args: Array[String]): Unit = {
