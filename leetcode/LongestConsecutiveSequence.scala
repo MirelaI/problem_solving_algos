@@ -1,43 +1,35 @@
 // Input [100, 4, 200, 1, 3, 2]
 // Output: 4
 
-import scala.collection.mutable.{ArrayBuffer, Map}
-
 object LongestConsectutiveSequence {
 
     def longestConsecutive(nums: Array[Int]): Int = {
-        if (nums.isEmpty) return 0
-        if (nums.size == 1) return 1
-        val numsBuffer = nums.to[ArrayBuffer]
+        val numsMap: Map[Int, Boolean] = nums.map { _ -> true}.toMap
+        var longestSeq = 0
 
-        val numsMap: Map[Int, Int] = collection.mutable.Map(nums.map { _ -> 0}.toSeq: _*) 
-        findChildren(numsMap, numsBuffer.tail, nums.head, 1)
+        for (num <- nums) {
+            val previous = num - 1
 
-        numsMap.values.groupBy(identity).mapValues(_.size).values.max
-    }
+            if (numsMap.get(previous).isEmpty) {
+                var current = num + 1 
+                var currentSeq = 1
 
-    @scala.annotation.tailrec
-    def findChildren(
-        numsMap: Map[Int, Int], 
-        nums: ArrayBuffer[Int], 
-        current: Int, 
-        sequenceNo: Int
-    ): Unit = {
-        // Return if we already visited the node
-        if (numsMap(current) != 0) return ()
-        
-        // Mark the node as visited
-        numsMap.update(current, sequenceNo)
-        if (nums.size == 0) return ()
+                while (numsMap.get(current).isDefined) {
+                    currentSeq += 1
+                    current += 1
+                }
 
-        if (numsMap.get(current - 1).isDefined && numsMap(current - 1) == 0) {
-            findChildren(numsMap, nums, current - 1, sequenceNo)
-        } 
-        
-        if (numsMap.get(current + 1).isDefined && numsMap(current + 1) == 0) {
-            findChildren(numsMap, nums, current + 1, sequenceNo)
+                if (currentSeq > longestSeq) longestSeq = currentSeq
+            } 
+
         }
 
-        findChildren(numsMap, nums.tail, nums.head, sequenceNo + 1)
+        longestSeq
+    }
+
+    def main(args: Array[String]): Unit = {
+        val digits = Array(100,4,200,1,3,2)
+
+        println(longestConsecutive(digits))
     }
 }
