@@ -18,7 +18,6 @@ object Solution {
             
             if (mapSums.get(v).isDefined) {
                 if ((i - mapSums(v)) > 1) return true
-
             } else {
                 mapSums(v) = i
             }
