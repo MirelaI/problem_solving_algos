@@ -14,25 +14,31 @@
 import scala.collection.mutable.Stack
 import Math.{max, min}
 
-object Solution {
-  def mergeIntervals(intervals: List[List[Int]]): List[List[Int]] = {
-    // Implement a stack
-    val mergedIntervals = Stack[List[Int]]()
+case class Interval(start: Int = 0, end: Int = 0)
 
-    for (interval <- intervals) {
+object Solution {
+
+  def merge(intervals: List[Interval]): List[Interval] = {
+    val intervalsSorted = intervals.sortBy( _.start )
+    // Implement a stack
+    val mergedIntervals = Stack[Interval]()
+
+    for (interval <- intervalsSorted) {
       // First entry case
       if (mergedIntervals.headOption.isEmpty) {
         mergedIntervals.push(interval)
       } else {
         // [[1,3],[2,6],[8,10],[15,18]]
-        if (mergedIntervals.head(1) >= interval(1) && mergedIntervals.head(0) <= interval(0)) {
+        if (mergedIntervals.head.end >= interval.end && mergedIntervals.head.start <= interval.start) {
           // go to the next entry
-        } else if (mergedIntervals.head(1) >= interval(0) && mergedIntervals.head(1) <= interval(1)) {
+        } else if (
+          // [1,4], [0, 1]
+          (mergedIntervals.head.end >= interval.start && mergedIntervals.head.end <= interval.end)) {
           val headOfStack = mergedIntervals.pop
-          val startOfMerged = min(headOfStack(0), interval(0))
-          val endOfMerged = max(headOfStack(1), interval(1))
+          val startOfMerged = min(headOfStack.start, interval.start)
+          val endOfMerged = max(headOfStack.end, interval.end)
 
-          val mergedInt = List(startOfMerged, endOfMerged)
+          val mergedInt = Interval(startOfMerged, endOfMerged)
           mergedIntervals.push(mergedInt)
         } else {
           mergedIntervals.push(interval)
@@ -44,8 +50,8 @@ object Solution {
   }
 
   def main(args: Array[String]): Unit = {
-    val intervals = List(List(1,3), List(2,6), List(8, 10), List(15, 18))
-    val mergedIntervals: List[List[Int]] = mergeIntervals(intervals)
+    val intervals = List(Interval(1,4), Interval(0,1))
+    val mergedIntervals: List[Interval] = merge(intervals)
 
     println(mergedIntervals)
   }
