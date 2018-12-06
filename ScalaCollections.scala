@@ -1,8 +1,6 @@
 
 object ScalaCollections {
   // Notes
-  // JMH is a harness in writting microbenchmarks on the JMH
-
 
   // Sum in terms of foldLeft
   def sum(myList: List[Int]): Int = {
